@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blogs - Sanju B</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script>
+        async function fetchMediumBlogs() {
+            const mediumRSS = "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@bsanju";
+            try {
+                const response = await fetch(mediumRSS);
+                const data = await response.json();
+                if (data.items && data.items.length > 0) {
+                    let output = data.items.slice(0, 5).map(post => `
+                        <li>
+                            <h3><a href="${post.link}" target="_blank">${post.title}</a></h3>
+                            <p><strong>Published:</strong> ${new Date(post.pubDate).toDateString()}</p>
+                            <p>${post.description ? post.description.replace(/<[^>]+>/g, "").substring(0, 200) : "No description"}... 
+                                <a href="${post.link}" target="_blank">Read More</a></p>
+                        </li>`).join("");
+                    document.getElementById("medium-blogs").innerHTML = output;
+                } else {
+                    document.getElementById("medium-blogs").innerHTML = "<p>No Medium blogs found.</p>";
+                }
+            } catch (error) {
+                console.error("Error fetching Medium blogs:", error);
+                document.getElementById("medium-blogs").innerHTML = "<p>Error loading Medium blogs.</p>";
+            }
+        }
+
+        async function fetchDevBlogs() {
+            const devURL = "https://dev.to/api/articles?username=bsanju";
+            try {
+                const response = await fetch(devURL);
+                const articles = await response.json();
+                if (articles.length > 0) {
+                    let output = articles.slice(0, 5).map(post => `
+                        <li>
+                            <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
+                            <p><strong>Published:</strong> ${new Date(post.published_at).toDateString()}</p>
+                            <p>${post.description ? post.description.substring(0, 200) : "No description"}... 
+                                <a href="${post.url}" target="_blank">Read More</a></p>
+                        </li>`).join("");
+                    document.getElementById("dev-blogs").innerHTML = output;
+                } else {
+                    document.getElementById("dev-blogs").innerHTML = "<p>No Dev.to blogs found.</p>";
+                }
+            } catch (error) {
+                console.error("Error fetching Dev.to blogs:", error);
+                document.getElementById("dev-blogs").innerHTML = "<p>Error loading Dev.to blogs.</p>";
+            }
+        }
+
+        window.onload = function () {
+            fetchMediumBlogs();
+            fetchDevBlogs();
+        };
+    </script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header h1 {
+            color: #5a3d8a;
+            font-size: 2rem;
+        }
+
+        section {
+            background: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            text-align: left;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #5a3d8a;
+            padding-bottom: 5px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        li:hover {
+            transform: scale(1.02);
+            background: #efefef;
+        }
+
+        a {
+            text-decoration: none;
+            color: #5a3d8a;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>My Blogs</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Latest Medium Blogs</h2>
+            <ul id="medium-blogs">
+                <p>Loading...</p>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Latest Dev.to Blogs</h2>
+            <ul id="dev-blogs">
+                <p>Loading...</p>
+            </ul>
+        </section>
+    </main>
+</body>
+
+</html>
