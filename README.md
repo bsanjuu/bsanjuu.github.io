@@ -14,4 +14,4 @@ I'm Sanjeevlu B, a passionate developer committed to continuous learning and gro
 
 ## Contact
 
-Connect with me on [LinkedIn](https://www.linkedin.com/in/nsanju0413).
+Connect with me on [LinkedIn](https://www.linkedin.com/in/bsanju).
